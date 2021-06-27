@@ -1,0 +1,25 @@
+# Conexão postgres
+
+server:
+  port: ${PORT}
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  database:
+    driverClassName: org.postgresql.Driver
+  datasource:
+    platform: postgres
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/post
+    username: postgres
+    password: admin
