@@ -1,7 +1,7 @@
 #DataBase mem H2
 
 server:
-  port: 3000
+  port: 8080
 
 spring:
   datasource:
