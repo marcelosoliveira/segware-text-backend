@@ -1,4 +1,4 @@
-package com.segware.text.impl;
+package com.segware.text.service.impl;
 
 import com.segware.text.dto.request.UserDTO;
 import com.segware.text.dto.response.MessageResponseDTO;

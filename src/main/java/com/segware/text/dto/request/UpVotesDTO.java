@@ -1,5 +1,6 @@
 package com.segware.text.dto.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpVotesDTO {
+
+    @ApiModelProperty(hidden = true)
+    private Long id;
 
     @NotNull
     private Boolean upVotes;
