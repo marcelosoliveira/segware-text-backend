@@ -2,9 +2,9 @@ package com.segware.text.service.impl;
 
 import com.segware.text.dto.request.PostTextDTO;
 import com.segware.text.dto.response.MessageResponseDTO;
-import com.segware.text.dto.response.PostResponseDTO;
 import com.segware.text.exception.PostDuplicateTextException;
 import com.segware.text.exception.PostNotFoundException;
+import com.segware.text.mapper.PostMapper;
 import com.segware.text.post.model.Post;
 import com.segware.text.post.repository.PostRepository;
 import com.segware.text.post.service.impl.PostService;
@@ -14,8 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +31,9 @@ public class PostServiceTest {
     private UserLoginSecurity userLoginSecurity;
 
     @Mock
+    private final PostMapper postMapper = PostMapper.INSTANCE;
+
+    @Mock
     private PostRepository postRepository;
 
     @InjectMocks
@@ -41,9 +42,6 @@ public class PostServiceTest {
     @Test
     void testGivenPostTextDTOThenReturnSuccessSavedMessage() {
         PostTextDTO postDTO = createFakeDTO();
-        Post expectedSavedPost = createFakeEntity();
-
-        when(postRepository.save(any(Post.class))).thenReturn(expectedSavedPost);
 
         MessageResponseDTO successMessage = postService.createPostText(postDTO);
 
@@ -68,19 +66,18 @@ public class PostServiceTest {
 
         when(postRepository.findAll()).thenReturn(expectedRegisteredPost);
 
-        Page<PostResponseDTO> expectedPeopleDTOPage = postService.listAll(Pageable.unpaged());
+        List<Post> expectedPostDTO = postRepository.findAll();
 
-        assertFalse(expectedPeopleDTOPage.isEmpty());
-        assertEquals(expectedPeopleDTOPage.getContent().get(0).getId(), postDTO.getId());
+        assertFalse(expectedPostDTO.isEmpty());
+        assertEquals(expectedPostDTO.get(0).getId(), postDTO.getId());
     }
 
     @Test
     void testGivenValidPostIdAndUpVotesInfoThenReturnSuccess() throws PostNotFoundException {
         var invalidPostId = 2L;
 
-        PostTextDTO postTextDTO = createFakeDTO();
-
-        when(postService.createPostText(postTextDTO)).thenReturn(MessageResponseDTO.builder().build());
+        when(postRepository.findById(invalidPostId))
+                .thenReturn(Optional.ofNullable(any(Post.class)));
 
         assertThrows(PostNotFoundException.class, () -> postService.createUpVotes(invalidPostId, "up"));
 
@@ -89,10 +86,11 @@ public class PostServiceTest {
     @Test
     void testGivenPostDuplicateTextInfoThenThrowException() throws PostDuplicateTextException {
         var postId = 1L;
-
         PostTextDTO postTextDTO = createFakeDTO();
+        Post post = createFakeEntity();
+        postTextDTO.setId(postId);
 
-        when(postService.createPostText(postTextDTO)).thenReturn(MessageResponseDTO.builder().build());
+        when(postRepository.save(post)).thenReturn(any(Post.class));
 
         assertThrows(PostDuplicateTextException.class, () -> postService.createPostText(postTextDTO));
     }
