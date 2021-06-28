@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/api/v1/userUpVotes")
 @AllArgsConstructor
 @CrossOrigin(origins = "*")
-public class UpVotesController {
+public class UpVotesController implements UpVotesControllerDocs {
 
     private UpVotesService upVotesService;
 
