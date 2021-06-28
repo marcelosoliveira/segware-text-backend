@@ -1,5 +1,6 @@
 package com.segware.text.dto.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,12 +8,16 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
+
+    @ApiModelProperty(hidden = true)
+    private UUID id;
 
     @NotBlank(message = "Field cannot be null or empty")
     @Size(min = 5, max = 20, message = "Enter a minimum of 5 characters and a maximum of 20")

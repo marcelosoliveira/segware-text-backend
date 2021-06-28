@@ -4,11 +4,11 @@ import com.segware.text.user.service.impl.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,8 +26,8 @@ import java.util.Arrays;
 @EnableAuthorizationServer
 @EnableResourceServer
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
-@Configuration
 public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 
     private UserService userService;
@@ -59,18 +59,18 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and()
+        http.cors().configurationSource(request -> new CorsConfiguration()
+                .applyPermitDefaultValues())
+                .and().csrf().disable()
                 .authorizeRequests()
-                .anyRequest()
-                .authenticated()
+                .antMatchers("**/post/**", "**/user/**").hasRole("USER")
                 .and()
-                .httpBasic()
-                .and().csrf().disable();
+                .httpBasic();
 
     }
 
     @Bean
-    public CorsFilter corsFilter() {
+    public FilterRegistrationBean corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
         configuration.addAllowedOrigin("*");
@@ -82,7 +82,11 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
-       return new CorsFilter(source);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return bean;
+
+//       return new CorsFilter(source);
     }
 
     @Bean
