@@ -63,7 +63,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
                 .applyPermitDefaultValues())
                 .and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("**/post/**", "**/user/**").hasRole("USER")
+                .antMatchers("**/post/**", "**/user/**", "**/userUpVotes/**").hasRole("USER")
                 .and()
                 .httpBasic();
 
@@ -73,20 +73,19 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
     public FilterRegistrationBean corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.addAllowedOrigin("*");
+        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setMaxAge(3600L);
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        return bean;
 
-//       return new CorsFilter(source);
+        return bean;
     }
 
     @Bean
