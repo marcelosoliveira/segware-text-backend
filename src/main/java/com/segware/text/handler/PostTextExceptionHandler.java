@@ -51,8 +51,8 @@ public class PostTextExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(PostDuplicateTextException.class)
-        public ResponseEntity<Object> handlerPostDuplicateTextException(PostDuplicateTextException ex,
-                                                                        WebRequest request) {
+    public ResponseEntity<Object> handlerPostDuplicateTextException(PostDuplicateTextException ex,
+                                                                    WebRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
 
         PostProblem postProblem = new PostProblem();
@@ -64,8 +64,8 @@ public class PostTextExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(PostNotFoundException.class)
-        public ResponseEntity<Object> handlerPostNotFoundException(PostNotFoundException ex,
-                                                                   WebRequest request) {
+    public ResponseEntity<Object> handlerPostNotFoundException(PostNotFoundException ex,
+                                                               WebRequest request) {
         HttpStatus status = HttpStatus.NOT_FOUND;
 
         PostProblem postProblem = new PostProblem();
@@ -77,8 +77,8 @@ public class PostTextExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UserNameExistsException.class)
-        public ResponseEntity<Object> handlerUserNameExistsException(UserNameExistsException ex,
-                                                                   WebRequest request) {
+    public ResponseEntity<Object> handlerUserNameExistsException(UserNameExistsException ex,
+                                                               WebRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
 
         PostProblem postProblem = new PostProblem();
