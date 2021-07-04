@@ -21,6 +21,7 @@ public interface PostMapper {
 
     Post toPostModel(PostTextDTO postTextDTO);
 
+    @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "createdAt", source = "createdAt", dateFormat = "dd-MM-yyyy")
     PostResponseDTO toPostResponseDTO(Post post);
 

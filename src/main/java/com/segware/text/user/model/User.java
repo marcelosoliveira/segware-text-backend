@@ -1,5 +1,6 @@
 package com.segware.text.user.model;
 
+import com.segware.text.post.model.Post;
 import com.segware.text.upvote.model.UpVotes;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -29,6 +30,9 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    Set<Post> posts;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     Set<UpVotes> upVotes;

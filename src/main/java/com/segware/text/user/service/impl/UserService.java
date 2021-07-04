@@ -4,6 +4,7 @@ import com.segware.text.dto.request.UserDTO;
 import com.segware.text.dto.response.MessageResponseDTO;
 import com.segware.text.exception.UserNameExistsException;
 import com.segware.text.mapper.PostMapper;
+import com.segware.text.security.UserLoginSecurity;
 import com.segware.text.user.model.User;
 import com.segware.text.user.repository.UserRepository;
 import com.segware.text.user.service.interfaces.UserInterface;
@@ -19,12 +20,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService, UserInterface {
 
     private final PostMapper postMapper = PostMapper.INSTANCE;
+
+    private UserLoginSecurity userLoginSecurity;
 
     private UserRepository userRepository;
 
@@ -67,4 +71,7 @@ public class UserService implements UserDetailsService, UserInterface {
         if (user.isPresent()) throw new UserNameExistsException("User already exists!");
     }
 
+    public UUID loginUserId() {
+        return userLoginSecurity.getLoginUser().getId();
+    }
 }

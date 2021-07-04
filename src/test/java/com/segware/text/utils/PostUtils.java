@@ -2,10 +2,12 @@ package com.segware.text.utils;
 
 import com.segware.text.dto.request.PostTextDTO;
 import com.segware.text.post.model.Post;
+import com.segware.text.upvote.model.UpVotes;
 import com.segware.text.user.model.User;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Set;
 
 import static com.segware.text.utils.UserUtils.createFakeUser;
 
@@ -37,7 +39,7 @@ public class PostUtils {
                 .upCount(UP_COUNT)
                 .downCount(DOWN_COUNT)
                 .createdAt(CREATES_AT)
-                .votes(Collections.singletonList(UpVotesUtils.createFakeEntity()))
+                .votes((Set<UpVotes>) UpVotesUtils.createFakeEntity())
                 .user(USER_LOGIN)
                 .build();
     }

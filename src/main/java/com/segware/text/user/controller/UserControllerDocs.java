@@ -6,6 +6,8 @@ import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.UUID;
+
 @Api(value = "Manager Person")
 public interface UserControllerDocs {
 
@@ -18,5 +20,11 @@ public interface UserControllerDocs {
     })
     @ResponseStatus(HttpStatus.CREATED)
     MessageResponseDTO createUser(UserDTO userDTO);
+
+    @ApiOperation(value = "Returns the logged in user id")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Ok")
+    })
+    UUID getUserId();
 
 }
